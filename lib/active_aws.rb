@@ -1,5 +1,6 @@
 require "active_aws/version"
 
+require 'aws-sdk'
 require 'active_support'
 require 'active_support/core_ext'
 
