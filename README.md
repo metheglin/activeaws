@@ -8,6 +8,12 @@ Add this line to your application's Gemfile:
 gem 'activeaws'
 ```
 
+If you want to load this library automatically with `Bundler.require`, please specify `require` option at Gemfile.
+
+```ruby
+gem 'activeaws', require: 'active_aws'
+```
+
 And then execute:
 
     $ bundle
@@ -17,6 +23,10 @@ Or install it yourself as:
     $ gem install activeaws
 
 ## Usage
+
+```ruby
+require 'active_aws'
+```
 
 ### Initialize
 
@@ -100,7 +110,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/active_aws.
+Bug reports and pull requests are welcome on GitHub at https://github.com/metheglin/activeaws.
 
 ## License
 
