@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["pigmybank@gmail.com"]
 
   spec.summary       = "Managing aws resources with active way."
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/metheglin/activeaws"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
