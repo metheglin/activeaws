@@ -48,7 +48,7 @@ module ActiveAws
 
     def forced_exec!( extra_tags={} )
       client = ActiveAws::Ec2.client
-      response = client.run_instances( self.to_h )
+      response = client.run_instances( self.to_h(extra_tags) )
       ActiveAws::Ec2.new( **response.instances[0] )
     end
 
