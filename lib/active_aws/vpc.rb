@@ -65,5 +65,13 @@ module ActiveAws
     def subnets
       ActiveAws::Subnet.where( :'vpc-id' => vpc_id )
     end
+
+    def private_subnets
+      ActiveAws::Subnet.where( :'vpc-id' => vpc_id, :'tag:Network' => 'Private' )
+    end
+
+    def public_subnets
+      ActiveAws::Subnet.where( :'vpc-id' => vpc_id, :'tag:Network' => 'Public' )
+    end
   end
 end
