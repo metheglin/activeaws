@@ -26,6 +26,7 @@ module ActiveAws
       end
 
       def find( id )
+        raise "id must be specified." if id.blank?
         response = client.describe_db_clusters({
           db_cluster_identifier: id,
         })
@@ -34,11 +35,10 @@ module ActiveAws
       end
 
       def find_by_name( name )
-        response = client.describe_db_clusters({
-          filters: [{ name: "tag:Name", values: [name] }], 
-        })
-        return nil if response.db_clusters.blank?
-        new( **response.db_clusters[0].to_h )
+        return nil if name.blank?
+        find( name )
+      rescue Aws::RDS::Errors::DBClusterNotFoundFault => e
+        return nil
       end
 
       # Usage:
