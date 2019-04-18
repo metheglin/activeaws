@@ -16,6 +16,7 @@ require_relative 'active_aws/vpc'
 require_relative 'active_aws/subnet'
 require_relative 'active_aws/s3_bucket'
 require_relative 'active_aws/key_pair'
+require_relative 'active_aws/rds_cluster'
 
 module ActiveAws
 end
