@@ -25,7 +25,7 @@ module ActiveAws
         response = client.describe_vpcs({
           vpc_ids: [vpc_id], 
         })
-        return nil unless response.vpcs
+        return nil if response.vpcs.blank?
         new( **response.vpcs[0].to_h )
       end
 
@@ -33,7 +33,7 @@ module ActiveAws
         response = client.describe_vpcs({
           filters: [{ name: "tag:Name", values: [name] }], 
         })
-        return nil unless response.vpcs
+        return nil if response.vpcs.blank?
         new( **response.vpcs[0].to_h )
       end
 

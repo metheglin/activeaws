@@ -29,7 +29,7 @@ module ActiveAws
         response = client.describe_subnets({
           vpc_ids: [vpc_id], 
         })
-        return nil unless response.subnets
+        return nil if response.subnets.blank?
         new( **response.subnets[0].to_h )
       end
 
@@ -37,7 +37,7 @@ module ActiveAws
         response = client.describe_subnets({
           filters: [{ name: "tag:Name", values: ["#{name}*"] }], 
         })
-        return nil unless response.subnets
+        return nil if response.subnets.blank?
         new( **response.subnets[0].to_h )
       end
 
