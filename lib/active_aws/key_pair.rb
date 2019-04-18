@@ -24,7 +24,7 @@ module ActiveAws
 
       def find_by_name( name )
         response = client.describe_key_pairs({
-          key_name: name,
+          key_names: [name],
         })
         return nil if response.key_pairs.blank?
         new( **response.key_pairs[0].to_h )
