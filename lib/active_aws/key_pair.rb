@@ -2,6 +2,7 @@ module ActiveAws
   class KeyPair < Base
 
     @attributes = [
+      :is_generated,
       :key_name,
       :key_fingerprint, 
       :key_material,
@@ -28,6 +29,8 @@ module ActiveAws
         })
         return nil if response.key_pairs.blank?
         new( **response.key_pairs[0].to_h )
+      rescue Aws::EC2::Errors::InvalidKeyPairNotFound => e
+        return nil
       end
 
       # Usage:
@@ -49,8 +52,12 @@ module ActiveAws
 
       def create!( key_name )
         response = client.create_key_pair( key_name: key_name )
-        new( **response.to_h )
+        new( **response.to_h.merge( is_generated: true ) )
       end
+    end
+
+    def generated?
+      !! is_generated
     end
   end
 end
