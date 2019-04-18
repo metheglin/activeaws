@@ -31,7 +31,7 @@ module ActiveAws
 
       def find_by_name( name )
         response = client.describe_vpcs({
-          filters: [{ name: "tag:Name", values: ["#{name}*"] }], 
+          filters: [{ name: "tag:Name", values: [name] }], 
         })
         return nil unless response.vpcs
         new( **response.vpcs[0].to_h )
