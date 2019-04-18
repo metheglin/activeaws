@@ -15,6 +15,7 @@ require_relative 'active_aws/target_group'
 require_relative 'active_aws/vpc'
 require_relative 'active_aws/subnet'
 require_relative 'active_aws/s3_bucket'
+require_relative 'active_aws/key_pair'
 
 module ActiveAws
 end
