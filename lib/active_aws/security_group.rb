@@ -74,15 +74,19 @@ module ActiveAws
       #     to_port: 22, 
       #   }, 
       # ], 
-      def create!( vpc_id:, group_name:, description:, ip_permissions_ingress:, ip_permissions_egress: )
+      def create!( vpc_id:, group_name:, description:, ip_permissions_ingress: nil, ip_permissions_egress: nil )
         response = client.create_security_group(
           description: description, 
           group_name: group_name, 
           vpc_id: vpc_id, 
         )
         sg = find( response.group_id )
-        sg.authorize_ingress!( ip_permissions: ip_permissions_ingress )
-        sg.authorize_egress!( ip_permissions: ip_permissions_egress )
+        if ip_permissions_ingress.present?
+          sg.authorize_ingress!( ip_permissions: ip_permissions_ingress )
+        end
+        if ip_permissions_egress.present?
+          sg.authorize_egress!( ip_permissions: ip_permissions_egress )
+        end
         sg.set_tags!( :"Name" => group_name )
         sg.reload
       end
