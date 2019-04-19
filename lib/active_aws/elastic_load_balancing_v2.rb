@@ -1,5 +1,10 @@
 module ActiveAws
-  class ElasticLoadBalancingV2 < Base
+  class ElasticLoadBalancingV2 < BaseResource
+
+    @resource_name = 'load_balancer'
+    @resource_id_name = 'load_balancer_arn'
+    @resource_identifier_name = 'name'
+    @client_class_name = 'Aws::ElasticLoadBalancingV2::Client'
     @attributes = [
       :load_balancer_arn,
       :dns_name, :canonical_hosted_zone_id, :created_time, 
@@ -12,24 +17,10 @@ module ActiveAws
     attr_accessor *attributes
 
     class << self
-      def client
-        Aws::ElasticLoadBalancingV2::Client.new( **configure.default_client_params )
-      end
-
-      def find( load_balancer_arn )
-        response = client.describe_load_balancers({
-          load_balancer_arns: [load_balancer_arn], 
-        })
-        return nil unless response
-        new( **response.load_balancers[0].to_h )
-      end
-
       def find_by_name( name )
-        response = client.describe_load_balancers({
-          names: [name], 
-        })
-        return nil unless response
-        new( **response.load_balancers[0].to_h )
+        super
+      rescue Aws::ElasticLoadBalancingV2::Errors::LoadBalancerNotFound => e
+        return nil
       end
     end
 
@@ -37,12 +28,8 @@ module ActiveAws
       load_balancer_name
     end
 
-    def reload
-      self.class.find( load_balancer_arn )
-    end
-
     def target_groups
-      TargetGroup.where( load_balancer_arn: load_balancer_arn )
+      @target_groups ||= TargetGroup.where( load_balancer_arn: load_balancer_arn )
     end
 
     # `waiter_name` can be checked with the command below.

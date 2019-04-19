@@ -7,11 +7,12 @@ module ActiveAws
     @attributes = []
 
     class << self
-      attr_accessor :attributes
+      attr_accessor :attributes, :client_class_name
       attr_reader :root_configure
       
       def inherited( klass )
         klass.attributes = @attributes
+        klass.client_class_name = @client_class_name
       end
 
       def load_config!( args )
@@ -28,6 +29,10 @@ module ActiveAws
       def configure
         Base.root_configure
       end
+
+      def client
+        client_class_name.constantize.new( **configure.default_client_params )
+      end
     end
 
     def initialize( **params )
@@ -36,12 +41,6 @@ module ActiveAws
         self.send(method, params[k]) if params[k].present?
       end
       yield( self ) if block_given?
-    end
-
-    def name
-      name_tag = tags.detect{|t| t[:key].to_s == "Name"}
-      return nil unless name_tag
-      name_tag[:value]
     end
 
     def to_h

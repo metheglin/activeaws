@@ -1,6 +1,7 @@
 module ActiveAws
   class S3Bucket < Base
-
+    
+    @client_class_name = 'Aws::S3::Client'
     @attributes = [
       :name,
       :creation_date,
@@ -10,11 +11,7 @@ module ActiveAws
     attr_accessor *attributes
 
     class << self
-      def client
-        Aws::S3::Client.new( **configure.default_client_params )
-      end
-
-      def create_public_hosting( name )
+      def create_public_hosting!( name )
         client.create_bucket(
           bucket: name,
           create_bucket_configuration: {
@@ -23,7 +20,7 @@ module ActiveAws
         )
       end
 
-      def create_website_hosting( name )
+      def create_website_hosting!( name )
         raise "Not Implemented yet"
       end
     end

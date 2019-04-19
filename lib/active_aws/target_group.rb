@@ -1,6 +1,10 @@
 module ActiveAws
-  class TargetGroup < Base
+  class TargetGroup < BaseResource
 
+    @resource_name = 'target_group'
+    @resource_id_name = 'target_group_arn'
+    @resource_identifier_name = 'name'
+    @client_class_name = 'Aws::ElasticLoadBalancingV2::Client'
     @attributes = [
       :target_group_arn,
       :target_group_name, 
@@ -16,41 +20,15 @@ module ActiveAws
     attr_accessor *attributes
 
     class << self
-      def client
-        Aws::ElasticLoadBalancingV2::Client.new( **configure.default_client_params )
-      end
-
-      def find( target_group_arn )
-        response = client.describe_target_groups({
-          target_group_arns: [target_group_arn], 
-        })
-        return nil unless response
-        new( **response.target_groups[0].to_h )
-      end
-
       def find_by_name( name )
-        response = client.describe_target_groups({
-          names: [name], 
-        })
-        return nil unless response
-        new( **response.target_groups[0].to_h )
-      end
-
-      # Usage:
-      # where( load_balancer_arn: ["xxxx"] )
-      def where( **args )
-        filter_params = args.map{|k, v| { name: k, values: Array.wrap(v) }}
-        response = client.describe_target_groups( args )
-        response.target_groups.map{|i| new( **i.to_h )}
+        super
+      rescue Aws::ElasticLoadBalancingV2::Errors::TargetGroupNotFound => e
+        return nil
       end
     end
 
     def name
       target_group_name
-    end
-
-    def reload
-      self.class.find( target_group_arn )
     end
 
     def health_descriptions

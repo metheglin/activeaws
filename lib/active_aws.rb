@@ -6,6 +6,7 @@ require 'active_support/core_ext'
 
 require_relative 'active_aws/configure'
 require_relative 'active_aws/base'
+require_relative 'active_aws/base_resource'
 require_relative 'active_aws/tag_spec'
 require_relative 'active_aws/ec2'
 require_relative 'active_aws/ec2_provisioner'
@@ -17,6 +18,7 @@ require_relative 'active_aws/subnet'
 require_relative 'active_aws/s3_bucket'
 require_relative 'active_aws/key_pair'
 require_relative 'active_aws/rds_cluster'
+require_relative 'active_aws/security_group'
 
 module ActiveAws
 end

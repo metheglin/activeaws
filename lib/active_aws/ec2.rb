@@ -1,6 +1,10 @@
 module ActiveAws
-  class Ec2 < Base
+  class Ec2 < BaseResource
 
+    @resource_name = 'instance'
+    @resource_id_name = 'instance_id'
+    @resource_identifier_name = nil
+    @client_class_name = 'Aws::EC2::Client'
     @attributes = [
       :block_device_mappings,
       :image_id, :instance_id, :instance_type, :key_name,
@@ -13,47 +17,9 @@ module ActiveAws
     attr_accessor *attributes
 
     class << self
-      def client
-        Aws::EC2::Client.new( **configure.default_client_params )
+      def detect_resources_from( response )
+        response.reservations[0].send( resource_name.pluralize )
       end
-
-      def find( instance_id )
-        response = client.describe_instances({
-          instance_ids: [instance_id], 
-        })
-        return nil unless response.reservations[0]
-        new( **response.reservations[0].instances[0].to_h )
-      end
-
-      def find_by_name( name )
-        response = client.describe_instances({
-          filters: [{ name: "tag:Name", values: [name] }], 
-        })
-        return nil unless response.reservations[0]
-        new( **response.reservations[0].instances[0].to_h )
-      end
-
-      # Usage:
-      # Ec2::where( :"tag:Role" => "web" )
-      # Ec2::where( :"instance-type" => "t2.micro" )
-      def where( **args )
-        filter_params = args.map{|k, v| { name: k, values: Array.wrap(v) }}
-        response = client.describe_instances({
-          filters: filter_params, 
-        })
-        instance_params = response.reservations.map{|r| r.instances }.flatten
-        instance_params.map{|i| new( **i.to_h )}
-      end
-    end
-
-    def name
-      name_tag = tags.detect{|t| t[:key].to_s == "Name"}
-      return nil unless name_tag
-      name_tag[:value]
-    end
-
-    def reload
-      self.class.find( instance_id )
     end
 
     def create_image!( name: nil, description: nil, no_reboot: true, block_device_mappings: nil )
