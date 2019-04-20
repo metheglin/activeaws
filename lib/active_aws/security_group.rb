@@ -18,8 +18,18 @@ module ActiveAws
     attr_accessor *attributes
 
     class << self
-      def find_by_name( name )
-        super
+      def find_by_name( name, vpc_id=nil )
+        cond = [{
+          name: "group-name",
+          values: [name],
+        }]
+        if vpc_id.present?
+          cond << {
+            name: "vpc-id",
+            values: [vpc_id],
+          }
+        end
+        find_one(filters: cond)
       rescue Aws::EC2::Errors::InvalidGroupNotFound => e
         return nil
       end
