@@ -18,6 +18,7 @@ module ActiveAws
 
     class << self
       def detect_resources_from( response )
+        return nil if response.reservations.blank?
         response.reservations[0].send( resource_name.pluralize )
       end
     end
