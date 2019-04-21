@@ -43,5 +43,13 @@ module ActiveAws
     def wait_until( waiter_name=:load_balancer_available, &block )
       self.class.client.wait_until(waiter_name, load_balancer_arns: [load_balancer_arn], &block)
     end
+
+    def alias_target
+      {
+        dns_name: dns_name,
+        evaluate_target_health: false, 
+        hosted_zone_id: canonical_hosted_zone_id,
+      }
+    end
   end
 end
