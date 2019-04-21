@@ -6,6 +6,7 @@ module ActiveAws
     @resource_identifier_name = nil
     @client_class_name = 'Aws::EC2::Client'
     @attributes = [
+      :is_generated,
       :block_device_mappings,
       :image_id, :instance_id, :instance_type, :key_name,
       :launch_time, :network_interfaces, 
@@ -51,6 +52,10 @@ module ActiveAws
     # end
     def wait_until( waiter_name=:instance_running, &block )
       self.class.client.wait_until(waiter_name, instance_ids: [instance_id], &block)
+    end
+
+    def generated?
+      !! is_generated
     end
   end
 end
