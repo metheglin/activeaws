@@ -15,10 +15,15 @@ module ActiveAws
 
     class << self
       def find_by_name( name )
+        search_name = "#{name}."
         resp = client.list_hosted_zones_by_name({
-          dns_name: name,
+          dns_name: search_name,
         })
-        new( **resp.hosted_zones[0] )
+        zone = resp.hosted_zones.detect do |z|
+          z.name == search_name
+        end
+        return nil if zone.blank?
+        new( **zone )
       end
 
       def create!( name )
