@@ -5,7 +5,7 @@ module ActiveAws
     @attributes = [
       :id,
       :name,
-      :caller_reference,
+      # :caller_reference,
       :config,
       :resource_record_set_count,
       :linked_service,
