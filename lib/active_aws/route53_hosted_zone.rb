@@ -29,7 +29,7 @@ module ActiveAws
       def create!( name )
         resp = client.create_hosted_zone({
           name: name,
-          caller_reference: Time.current.to_i,
+          caller_reference: Time.current.to_i.to_s,
         })
         new( **resp.hosted_zone )
       end
