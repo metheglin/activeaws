@@ -5,7 +5,7 @@ module ActiveAws
     @attributes = [
       :id,
       :name,
-      # :caller_reference,
+      :caller_reference,
       :config,
       :resource_record_set_count,
       :linked_service,
@@ -27,7 +27,10 @@ module ActiveAws
       end
 
       def create!( name )
-        resp = client.create_hosted_zone({ name: name })
+        resp = client.create_hosted_zone({
+          name: name,
+          caller_reference: Time.current.to_i,
+        })
         new( **resp.hosted_zone )
       end
     end
