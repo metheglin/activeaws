@@ -5,6 +5,7 @@ require 'active_support'
 require 'active_support/core_ext'
 
 require_relative 'active_aws/configure'
+require_relative 'active_aws/configure_pool'
 require_relative 'active_aws/base'
 require_relative 'active_aws/base_resource'
 require_relative 'active_aws/tag_spec'
