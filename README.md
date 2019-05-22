@@ -32,8 +32,10 @@ require 'active_aws'
 
 ```rb
 ActiveAws::Base.load_config!(
-  region: 'ap-northeast-1',
-  profile: 'rv-metheglin',
+  default: {
+    region: 'ap-northeast-1',
+    profile: 'rv-metheglin',
+  }
 )
 ```
 
@@ -101,6 +103,36 @@ prov.save!
 prov.wait_until :stack_create_complete
 ```
 
+### Configure Switching
+
+```yml
+default:
+  region: ap-northeast-1
+  profile: aws-default
+staging:
+  region: ap-northeast-1
+  profile: aws-staging
+production:
+  region: ap-northeast-1
+  profile: aws-production
+```
+
+```ruby
+ActiveAws::Base.load_config!( File.expand_path("./aws.yml", __dir__) )
+
+# Fetch ec2 information from `default` profile
+ActiveAws::Ec2.find_by_name('web-server-1') 
+
+# Fetch ec2 information from `staging` profile
+ActiveAws::Base.with_configure(:staging) do
+  ActiveAws::Ec2.find_by_name('web-server-1')
+end
+
+# Fetch ec2 information from `production` profile
+ActiveAws::Base.with_configure(:production) do
+  ActiveAws::Ec2.find_by_name('web-server-1')
+end
+```
 
 ## Development
 
