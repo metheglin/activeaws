@@ -134,6 +134,12 @@ ActiveAws::Base.with_configure(:production) do
 end
 ```
 
+#### Changing Default Configure of Current Context
+
+```ruby
+ActiveAws::Base.add_context!( Thread.current, :staging )
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

@@ -34,7 +34,9 @@ module ActiveAws
       end
 
       def configure
-        Base.pool.get_with_context( Thread.current )
+        c = Base.pool.get_with_context( Thread.current )
+        raise "Configure couldn't be resolved!! Please confirm `aws.yml`." unless c
+        c
       end
 
       def client
