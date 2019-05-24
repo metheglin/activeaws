@@ -137,7 +137,7 @@ end
 #### Changing Default Configure of Current Context
 
 ```ruby
-ActiveAws::Base.add_context!( Thread.current, :staging )
+ActiveAws::Base.pool.add_context!( Thread.current, :staging )
 ```
 
 ## Development
